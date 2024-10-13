@@ -1,5 +1,7 @@
+import os
+
 import flask
-from flask import Flask, render_template, request
+from flask import Flask, request
 import blockchain.whitelist as whitelist
 import json
 import blockchain.transaction as transaction
@@ -9,11 +11,13 @@ app = Flask(__name__)
 
 def parse_arg(parsed_arg):
     get_arg = request.args.get(parsed_arg)
+    if not get_arg:
+        return
     return get_arg.replace(" ", "")
 
 
 def check_api_key(api_key):
-    if api_key != "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa":
+    if api_key != os.environ["API_KEY"]:
         return flask.abort(403)
 
 
