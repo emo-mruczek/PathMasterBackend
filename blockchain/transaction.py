@@ -1,5 +1,5 @@
 from config import get_var, send_transaction
-import whitelist
+import blockchain.whitelist as whitelist
 
 
 # Function to award tokens to a user
@@ -8,7 +8,7 @@ def award_tokens(user_address, token_amount):
     txn = get_var("CONTRACT").functions.awardTokens(user_address, token_amount).build_transaction({
         'chainId': get_var("CHAIN_ID"),
         'gas': 2000000,
-        'gasPrice': get_var("WEB3").to_wei('20', 'gwei'),
+        'gasPrice': get_var("WEB3").to_wei(get_var("GAS_PRICE"), 'gwei'),
         'nonce': nonce
     })
 
@@ -24,16 +24,16 @@ def get_balance(checked_address, silent=False):
     return balance
 
 # Function to transfer tokens between whitelisted addresses
-def transfer_tokens(sender_private_key, sender_address, recipient_address, token_amount):
+def transfer_tokens(sender_private_key, sender_address, recipient_address, token_amount: int):
     if not whitelist.check_whitelist(recipient_address):
         raise Exception("Receiving address is not on whitelist.")
-    if float(get_balance(sender_address, True)) / (10 ** get_var("DECIMALS")) < token_amount:
+    if int(get_balance(sender_address, True)) / (10 ** get_var("DECIMALS")) < token_amount:
         raise Exception("Sender does not have enough tokens.")
     nonce = get_var("WEB3").eth.get_transaction_count(sender_address)
     txn = get_var("CONTRACT").functions.transfer(recipient_address, token_amount).build_transaction({
         'chainId': get_var("CHAIN_ID"),
         'gas': 2000000,
-        'gasPrice': get_var("WEB3").to_wei('20', 'gwei'),
+        'gasPrice': get_var("WEB3").to_wei(get_var("GAS_PRICE"), 'gwei'),
         'nonce': nonce
     })
     # Sign and send the transaction

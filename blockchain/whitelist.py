@@ -15,7 +15,7 @@ def add_to_whitelist(address_to_add):
     txn = get_var("CONTRACT").functions.addToWhitelist(address_to_add).build_transaction({
         'chainId': get_var("CHAIN_ID"),  # Ganache local testnet default chain ID
         'gas': 2000000,
-        'gasPrice': get_var("WEB3").to_wei('20', 'gwei'),
+        'gasPrice': get_var("WEB3").to_wei(get_var("GAS_PRICE"), 'gwei'),
         'nonce': nonce
     })
     txn_hash = send_transaction(txn, get_var("OWNER_PRIVATE_KEY"))
@@ -25,12 +25,12 @@ def add_to_whitelist(address_to_add):
 def remove_from_whitelist(address_to_remove):
     if not check_whitelist(address_to_remove):
         print(f"{address_to_remove} is not on whitelist.")
-        return False
+        raise Exception(f"{address_to_remove} is not on whitelist.")
     nonce = get_var("WEB3").eth.get_transaction_count(get_var("OWNER_ADDRESS"))
     txn = get_var("CONTRACT").functions.removeFromWhitelist(address_to_remove).build_transaction({
-        'chainId': get_var("CONTRACT"),
+        'chainId': get_var("CHAIN_ID"),
         'gas': 2000000,
-        'gasPrice': get_var("WEB3").to_wei('20', 'gwei'),
+        'gasPrice': get_var("WEB3").to_wei(get_var("GAS_PRICE"), 'gwei'),
         'nonce': nonce
     })
     txn_hash = send_transaction(txn, get_var("OWNER_PRIVATE_KEY"))

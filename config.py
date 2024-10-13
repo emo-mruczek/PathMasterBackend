@@ -18,7 +18,7 @@ if not WEB3.is_connected():
     exit(-1)
 
 # Load contract ABI from a JSON file or string
-abi_token_path = "/home/user/Source_Codes/contract_js/build/contracts/WhitelistedToken.json"
+abi_token_path = "/home/user/Source_Codes/contract_js/artifacts/contracts/WhitelistedToken.sol/WhitelistedToken.json"
 with open(abi_token_path) as f:
     contract_abi = json.load(f)["abi"]
 
@@ -34,6 +34,7 @@ config = {
     "CONTRACT": CONTRACT,
     "WEB3": WEB3,
     "DECIMALS": 0,
+    "GAS_PRICE": 15,
 }
 
 
