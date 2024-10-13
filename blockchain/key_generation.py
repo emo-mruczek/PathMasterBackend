@@ -10,4 +10,5 @@ def gen_account():
     print(f"Public key: {address}")
     return json.dumps({"private_key": priv_key, "address": address})
 
-gen_account()
+if __name__ == "__main__":
+    gen_account()
