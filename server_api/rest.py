@@ -5,6 +5,7 @@ from flask import Flask, request
 import blockchain.whitelist as whitelist
 import json
 import blockchain.transaction as transaction
+import blockchain.key_generation as key_generation
 
 app = Flask(__name__)
 
@@ -19,6 +20,12 @@ def parse_arg(parsed_arg):
 def check_api_key(api_key):
     if api_key != os.environ["API_KEY"]:
         return flask.abort(403)
+
+@app.route("/generate_account", methods=["GET"])
+def gen_account():
+    check_api_key(parse_arg("k"))
+
+    return key_generation.gen_account()
 
 
 @app.route("/check_balance", methods=["GET"])
