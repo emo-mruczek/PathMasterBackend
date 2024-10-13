@@ -1,0 +1,4 @@
+.idea
+nodejs_blockchain/cache
+nodejs_blockchain/node_modules
+__pycache__
